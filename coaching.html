@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jana Rojková | Coaching</title>
+    <link rel="icon" type="image/png" href="muscle.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #b5a48b;
+            --bg: #050505;
+            --text: #ffffff;
+            --text-dim: #a0a0a0;
+            --transition: 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg); color: var(--text); line-height: 1.7; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+
+        .topbar {
+            position: fixed; top: 0; width: 100%; height: 60px;
+            background: rgba(5, 5, 5, 0.95);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 5%; z-index: 1000; border-bottom: 1px solid #1a1a1a;
+        }
+        .topbar-links { display: flex; gap: 40px; }
+        .topbar-links a { 
+            text-decoration: none; color: var(--text-dim); 
+            font-weight: 300; font-size: 0.8rem; 
+            transition: 0.4s; text-transform: uppercase; letter-spacing: 2px; 
+        }
+        .topbar-links a:hover { color: var(--accent); }
+
+        .hero {
+            position: relative; height: 100vh; width: 100%;
+            overflow: hidden; display: flex; align-items: center; justify-content: center;
+        }
+
+        .slider-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+        .slide {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0; transform: scale(1.1);
+            transition: opacity 1.5s ease-in-out, transform 1.5s ease-in-out;
+            background-size: cover; background-position: center;
+        }
+        .slide.active { opacity: 0.35; transform: scale(1); }
+
+        .hero-content {
+            position: relative; z-index: 10; text-align: center; max-width: 800px;
+        }
+        .hero-content h1 { 
+            font-size: clamp(2rem, 5vw, 3.5rem); 
+            font-weight: 400; text-transform: uppercase; 
+            letter-spacing: 8px; margin-bottom: 15px;
+        }
+        .hero-content p {
+            color: var(--accent); font-size: 0.9rem;
+            text-transform: uppercase; letter-spacing: 4px; font-weight: 300;
+        }
+
+        section { padding: 140px 10%; }
+        .container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+
+        /* OPRAVA FOTEK - Menší a vycentrované */
+        .slide-img { display: flex; justify-content: center; align-items: center; }
+        .slide-img img { 
+            width: 100%; 
+            max-width: 380px; /* Zde se nastavuje velikost fotek */
+            height: auto;
+            border-radius: 2px; 
+            filter: grayscale(40%); 
+            transition: 0.8s; 
+        }
+        .slide-img:hover img { filter: grayscale(0%); }
+
+        h2 { font-size: 1.8rem; margin-bottom: 30px; font-weight: 400; text-transform: uppercase; letter-spacing: 3px; color: var(--accent); }
+        .slide-text p { color: var(--text-dim); margin-bottom: 20px; font-weight: 300; }
+        
+        .list-clean { list-style: none; margin-bottom: 30px; }
+        .list-clean li { margin-bottom: 10px; color: var(--text); font-size: 0.95rem; font-weight: 300; border-left: 1px solid var(--accent); padding-left: 15px; }
+
+        .btn-minimal {
+            display: inline-block; padding: 12px 30px; border: 1px solid var(--accent);
+            color: var(--accent); text-decoration: none; font-size: 0.8rem;
+            text-transform: uppercase; letter-spacing: 2px; transition: 0.4s;
+            background: transparent; cursor: pointer;
+        }
+        .btn-minimal:hover { background: var(--accent); color: #000; }
+
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; margin-top: 60px; }
+        .video-card { text-decoration: none; color: var(--text); }
+        .video-card .img-wrap { overflow: hidden; margin-bottom: 15px; border-radius: 2px; }
+        .video-card img { width: 100%; aspect-ratio: 16/9; object-fit: cover; transition: 0.6s; filter: brightness(0.7); }
+        .video-card:hover img { transform: scale(1.05); filter: brightness(1); }
+        .video-card p { font-size: 0.85rem; letter-spacing: 1px; color: var(--text-dim); transition: 0.3s; }
+        .video-card:hover p { color: var(--accent); }
+
+        /* FORMULÁŘ STYLY */
+        .form-container { max-width: 600px; margin: 0 auto; text-align: center; }
+        .form-group { margin-bottom: 20px; }
+        .form-input {
+            width: 100%; padding: 15px; background: #111; border: 1px solid #222;
+            color: #fff; font-family: 'Inter', sans-serif; transition: 0.3s;
+        }
+        .form-input:focus { border-color: var(--accent); outline: none; background: #151515; }
+        textarea.form-input { min-height: 150px; resize: none; }
+
+        .reveal { opacity: 0; transform: translateY(20px); transition: var(--transition); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+            .list-clean li { border-left: none; padding-left: 0; }
+            .slide-img img { max-width: 300px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="topbar">
+    <div class="topbar-links">
+        <a href="#coaching">Coaching</a>
+        <a href="#omne">O mně</a>
+        <a href="#videa">Povídání</a>
+        <a href="#kontakt">Kontakt</a>
+    </div>
+    <a href="https://instagram.com/rojkovaa_j" target="_blank" style="opacity: 0.6;">
+        <img src="ig-icon.png" alt="IG" style="width:30px;">
+    </a>
+</nav>
+
+<header class="hero">
+    <div class="slider-container">
+        <div class="slide active" style="background-image: url('Screenshot_20260120_190124_Instagram.jpg');"></div>
+        <div class="slide" style="background-image: url('Screenshot_20260120_190854_Instagram.jpg');"></div>
+        <div class="slide" style="background-image: url('drep\ \(1\).png');"></div>
+        <div class="slide" style="background-image: url('Screenshot_20260120_184133_Instagram~2.jpg');"></div>
+        <div class="slide" style="background-image: url('Screenshot_20260120_190149_Instagram.jpg');"></div>
+    </div>
+    <div class="hero-content">
+        <p>Přestaň v posun pouze doufat...</p>
+        <h1>ZAČNI POŘÁDNĚ TRÉNOVAT</h1>
+    </div>
+</header>
+
+<section id="coaching" class="container reveal">
+    <div class="slide-img">
+        <img src="Screenshot_20260120_184330_Instagram.jpg" alt="Training">
+    </div>
+    <div class="slide-text">
+        <h2>Coaching</h2>
+        <p>Závodíš v trojboji? Snažíš se o vysněnou postavu? Nebo s tímhle vším chceš začít a nevíš jak?</p>
+        <p>Ať už je tvůj cíl jakýkoliv, pojď dát konečně svému tréninku hlavu a patu!</p>
+        <ul class="list-clean">
+            <li>Individuální tréninkový plán - ať už jsi powerlifter nebo ne</li>
+            <li>Příprava na soutěže</li>
+            <li>Možné osobní tréninky</li>
+            <li>Nutriční poradenství</li>
+        </ul>
+        <a href="#kontakt" class="btn-minimal">Jdu do toho!</a>
+    </div>
+</section>
+
+<section id="omne" style="background: #080808;">
+    <div class="container reveal">
+        <div class="slide-text">
+            <h2>Kdo jsem?</h2>
+            <p>Držitelka čtyř světových rekordů, dvojnásobná mistryně světa v benči RAW i EQ, mistryně Evropy v trojboji EQ a vícemistryně světa v trojboji RAW.</p>
+            <p>Mou vizí je předávat zkušenosti ze svých příprav na nejvyšší úrovni každému, kdo chce v tréninku vidět smysl a reálné výsledky.</p>
+        </div>
+        <div class="slide-img">
+            <img src="Jana-Rojkova-24.jpg" alt="Jana Rojková">
+        </div>
+    </div>
+</section>
+
+<section id="videa">
+    <div style="text-align: center;" class="reveal">
+        <h2>Rozhovory</h2>
+    </div>
+    <div class="video-grid">
+        <a href="https://youtu.be/HReE0uMuBBY" target="_blank" class="video-card reveal">
+            <div class="img-wrap"><img src="nahledak-upg.png" alt="Video"></div>
+            <p>Trénink, strava, spánek / 2025</p>
+        </a>
+        <a href="https://youtu.be/POsbPsVZZf8" target="_blank" class="video-card reveal">
+            <div class="img-wrap"><img src="nahledak-Plzen.png" alt="Video"></div>
+            <p>ME EQ / Zhodnocení výkonu</p>
+        </a>
+        <a href="https://youtu.be/Nfv6shRfOP4" target="_blank" class="video-card reveal">
+            <div class="img-wrap"><img src="nahledak-Norsko.png" alt="Video"></div>
+            <p>MS v benči / Norsko 2025</p>
+        </a>
+    </div>
+</section>
+
+<section id="kontakt" style="background: #080808;" class="reveal">
+    <div class="form-container">
+        <h2>Máš zájem o spolupráci?</h2>
+        <p style="color: var(--text-dim); margin-bottom: 40px; font-weight: 300;">Vyplň formulář níže a pustíme se do práce.</p>
+        
+        <form action="https://formspree.io/f/xqeeglep" method="POST">
+            <div class="form-group">
+                <input type="text" name="jmeno" class="form-input" placeholder="Tvé jméno" required>
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" class="form-input" placeholder="Tvůj e-mail" required>
+            </div>
+            <div class="form-group">
+                <textarea name="zprava" class="form-input" placeholder="Tvůj cíl / zpráva..." required></textarea>
+            </div>
+            <input type="hidden" name="_next" value="index.html">
+            
+            <button type="submit" class="btn-minimal" style="width: 100%;">Odeslat zprávu</button>
+        </form>
+    </div>
+</section>
+
+<footer style="padding: 100px 5% 40px; text-align: center; border-top: 1px solid #1a1a1a;">
+    <p style="font-size: 0.7rem; letter-spacing: 2px; color: var(--text-dim); text-transform: uppercase;">
+        © 2026 Jana Rojková. Všechna práva vyhrazena.
+    </p>
+</footer>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    let currentSlide = 0;
+
+    function nextSlide() {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add('active');
+    }
+    setInterval(nextSlide, 5000);
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
