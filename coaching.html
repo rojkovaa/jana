@@ -115,6 +115,68 @@
             .list-clean li { border-left: none; padding-left: 0; }
             .slide-img img { max-width: 300px; }
         }
+        /* Specifické stylování pro sekci certifikace */
+.cert-container {
+    display: flex;
+    justify-content: center; /* Vycentruje obsah */
+    padding: 0 5%; /* Menší okraje (5% místo 10%), aby bylo víc místa na fotky */
+    gap: 5%; /* Menší mezera mezi fotkami (5% místo 10%) */
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.cert-item {
+    width: 42.5%; /* Obrázky jsou nyní znatelně větší */
+}
+
+.cert-item img {
+    width: 100%; 
+    height: auto;
+    border-radius: 2px;
+    filter: grayscale(40%);
+    transition: 0.8s;
+}
+
+.cert-item:hover img {
+    filter: grayscale(0%);
+}
+
+/* Responzivita pro mobily */
+@media (max-width: 768px) {
+    .cert-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+        padding: 0 5%;
+    }
+    .cert-item {
+        width: 90%; /* Na mobilu budou pod sebou a velmi velké, aby šel text přečíst */
+    }
+}
+/* Úprava horního menu pro mobilní zařízení */
+@media (max-width: 768px) {
+    .topbar {
+        padding: 0 3%; /* Zmenšíme prázdné místo po stranách menu */
+    }
+    .topbar-links {
+        gap: 12px; /* Výrazně zmenšíme mezery mezi jednotlivými odkazy (původně 40px) */
+    }
+    .topbar-links a {
+        font-size: 0.65rem; /* Zmenšíme samotné písmo */
+        letter-spacing: 1px; /* Zmenšíme mezeru mezi písmenky, to ušetří hodně místa */
+    }
+}
+
+/* Pro opravdu velmi úzké telefony (např. iPhone SE) to můžeme ještě trochu stáhnout */
+@media (max-width: 400px) {
+    .topbar-links {
+        gap: 8px;
+    }
+    .topbar-links a {
+        font-size: 0.55rem;
+        letter-spacing: 0.5px;
+    }
+}
     </style>
 </head>
 <body>
@@ -123,6 +185,7 @@
     <div class="topbar-links">
         <a href="#coaching">Coaching</a>
         <a href="#omne">O mně</a>
+        <a href="#certifikace">Certifikace</a>
         <a href="#videa">Povídání</a>
         <a href="#kontakt">Kontakt</a>
     </div>
@@ -141,7 +204,7 @@
     </div>
     <div class="hero-content">
         <p>Přestaň v posun pouze doufat...</p>
-        <h1>ZAČNI POŘÁDNĚ TRÉNOVAT</h1>
+        <h1>ZAČNI TRÉNOVAT CHYTŘE</h1>
     </div>
 </header>
 
@@ -172,6 +235,21 @@
         </div>
         <div class="slide-img">
             <img src="Jana-Rojkova-24.jpg" alt="Jana Rojková">
+        </div>
+    </div>
+</section>
+
+<section id="certifikace" style="background: #080808;">
+    <div style="text-align: center; margin-bottom: 50px;" class="reveal">
+        <h2>Certifikace</h2>
+    </div>
+
+    <div class="cert-container reveal">
+        <div class="cert-item">
+            <img src="Mara-certifikat.jpg" alt="Certifikát 1">
+        </div>
+        <div class="cert-item">
+            <img src="FRC-certificate.jpg" alt="Certifikát 2">
         </div>
     </div>
 </section>
@@ -213,7 +291,7 @@
             </div>
             <input type="hidden" name="_next" value="index.html">
             
-            <button type="submit" class="btn-minimal" style="width: 100%;">Odeslat zprávu</button>
+            <button type="submit" class="btn-minimal" style="width: 100%;">Odeslat</button>
         </form>
     </div>
 </section>
